@@ -1,0 +1,31 @@
+.date-head {
+    min-width : 120px;
+    max-width: 220px;
+}
+td.training {
+    padding: 10px 5px;
+    vertical-align: bottom;
+}
+.table th {
+    vertical-align: middle;
+}
+.card-body {
+    padding:5px;
+    margin:-2px;
+    min-width: 120px;
+}
+.vacancy-cell {
+    margin : 0;
+}
+.btn-group-sm>.btn, .btn-sm {
+    float : right;
+    padding: 0.05rem 0.5rem;
+}
+i.fa {
+    float: right;
+    color: grey;
+    font-size: 20px;
+}
+.time_head {
+    max-width: 64px;
+}

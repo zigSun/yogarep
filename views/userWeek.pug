@@ -1,0 +1,86 @@
+extends layout
+
+block content
+    .table-responsive
+        table.table.table-bordered
+            thead
+                tr.text-center 
+                    th(scope="col")
+                    each date in dates
+                        th.date_head(scope="col")= date
+            tbody
+                tr
+                    th(scope="row") Утро
+                    +shedule_grid('10:00')
+                tr
+                    th(scope="row") 
+                    +shedule_grid('11:30')
+                tr
+                    th(scope="row") День
+                    +shedule_grid('13:00')
+                tr
+                    th(scope="row") 
+                    +shedule_grid('15:00')
+                tr
+                    th(scope="row") 
+                    +shedule_grid('16:30')
+                tr
+                    th(scope="row") Вечер
+                    +shedule_grid('18:00')
+                tr
+                    th(scope="row") 
+                    +shedule_grid('19:30')
+                tr
+                    th(scope="row")
+                    +shedule_grid('21:00')
+
+    div.modal#activity-modal(tabindex="-1" role="dialog")
+        div.modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title Зал 1
+                .modal-body
+                    p.period-info
+                        span#preiod-info-data
+                    p.activity-info Тип занятий :
+                        span#activity-info-data 
+                    p.instructor-info Инструктор :
+                        span#instructor-info-data
+                    p.member-info Участников занятия :
+                        span#member-info-data
+                    form#go-form
+                        div.form-group.d-none
+                            input#trainingdate_input(name="trainingdate", type="text")
+                            input#trainingtime_input(name="trainingtime", type="text")
+                        .form-group.col-md-12
+                            input.form-control#new_mem_input(type="text", placeholder="Имя, Фамилия", name="new_mem", value="",required)
+                        .form-group.col-md-12
+                            input.form-control#phone_input(type="text", placeholder="Телефон", name = "new_mem_phone", value="",required)
+                        .modal-footer
+                            .form-group
+                                button.btn.btn-secondary#cancle(data-dismiss="modal") Отмена
+                                button.btn.btn-success#save-event(type='submit') Записаться
+
+
+
+mixin shedule_grid(time)
+    -for(var i=0;i<7;i++)
+        td.training(data-training-date=dates[i], data-training-time=time) 
+            if activities
+                - var notfound = true
+                each activity in activities
+                    - var writeOrNot=activity.date==dates[i] && activity.time==time
+                    if  writeOrNot
+                        - notfound = false            
+                        .card
+                            .card-body
+                                h5.card-title.activity-cell= activity.activity
+                                h6.card-subtitle.period-cell #{activity.timeStart} - #{activity.timeEnd}
+                                p.card-text.instructor-cell= activity.instructor
+                                - var vacancyCnt = activity.vacancy > 0
+                                if vacancyCnt
+                                    p.vacancy-cell Мест: 
+                                        span.vacancy-count-cell #{activity.vacancy}
+                                        button.btn.btn-sm.btn-success.go-btn Иду!
+                                else
+                                    p.vacancy-cell Мест нет

@@ -1,0 +1,32 @@
+extends adminLayout
+
+block content
+    table.table
+        thead
+            tr 
+                th(scope="col") #
+                th(scope="col") Имя клиента
+                th(scope="col") Номер телефона
+                th(scope="col") Статус
+                th(scope="col")
+        tbody
+            each client, ind in client_list
+                tr  
+                    th(scope="row")= ind+1
+                    td #{client.name}
+                    td #{client.phone_number}
+                    td #{client.status}
+                    td(align="right") 
+                        a(href='/admin/clients/delete'+client.url)
+                            i.fa.fa-times
+    form.form-row(method='POST' action='')      
+        div.col-4
+            input.form-control#name_input(name="client_name", type="text", placeholder="Имя, Фамилия", required)
+        div.col-4
+            input.form-control#phone_input(name="client_phone", type="text", placeholder="Телефон", required)
+        div.col-4
+            button.btn.btn-primary.mb-2(type="submit") Добавить клиента
+    if errors 
+        ul
+        for error in errors
+            li!= error.msg

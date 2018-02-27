@@ -1,0 +1,27 @@
+extends adminLayout
+
+block content
+    if instructor_list
+    table.table
+        thead.theat-dark
+            tr 
+                th(scope="col") #
+                th(scope="col") Имя инструктора
+                th(scope="col") 
+        tbody
+            each instructor, ind in instructor_list
+                tr
+                    th(scope="row")= ind+1 
+                    td #{instructor.name}
+                    td(align="right") 
+                        a(href='/admin/instructors/delete'+instructor.url)
+                            i.fa.fa-times
+    form.form-row(method='POST' action='')      
+        div.col-6    
+            input.form-control(name="instructor_name", type="text", placeholder="Имя, Фамилия", required)
+        div.col-3
+            button.btn.btn-primary(type="submit") Добавить инструктора
+    if errors 
+        ul
+        for error in errors
+            li!= error.msg

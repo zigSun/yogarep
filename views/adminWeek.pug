@@ -1,0 +1,116 @@
+extends adminLayout
+
+block content
+    .table-responsive
+        table.table.table-bordered
+            thead
+                tr 
+                    th.time_head(scope="col") Время
+                    each date in dates
+                        th.date_head.text-center(scope="col")= date
+            tbody
+                tr
+                    th.time_head(scope="row") 10:00
+                    +shedule_grid('10:00')
+                tr
+                    th.time_head(scope="row") 11:30
+                    +shedule_grid('11:30')
+                tr
+                    th.time_head(scope="row") 13:00
+                    +shedule_grid('13:00')
+                tr
+                    th.time_head(scope="row") 15:00
+                    +shedule_grid('15:00')
+                tr
+                    th.time_head(scope="row") 16:30
+                    +shedule_grid('16:30')
+                tr
+                    th.time_head(scope="row") 18:00
+                    +shedule_grid('18:00')
+                tr
+                    th.time_head(scope="row") 19:30
+                    +shedule_grid('19:30')
+                tr
+                    th.time_headh(scope="row") 21:00
+                    +shedule_grid('21:00')
+
+    div.modal#activity-modal(tabindex="-1" role="dialog")
+        div.modal-dialog(role="document")
+            .modal-content
+                .modal-header
+                    h5.modal-title Зал 1
+                .modal-body
+                    form#activity-form
+                        div.form-group.d-none
+                            input#trainingdate_input(name="trainingdate", type="text")
+                            input#trainingtime_input(name="trainingtime", type="text")
+                        div.form-row
+                            .form-group.col-md-3
+                                label(for="timeStart") Начало:
+                                select.form-control#timeStart_input(type="select", name="timeStart")
+                                    each time in time_select
+                                        option(value=time)= time
+                            .form-group.col-md-3
+                                label(for="timeEnd") Окончание:
+                                select.form-control#timeEnd_input(type="select", name="timeEnd")
+                                    each time in time_select
+                                        option(value=time)= time 
+                        div.form-group
+                            label(for="activity") Тип занятий
+                            input.form-control#activity_input(type="text", placeholder="Тип занятий",name="activity",required)
+                        div.form-group
+                            label(for="instructor") Инструктор:
+                            select.form-control#instructor_input(type="select", name="instructor")
+                                option
+                                each instructor in instructor_list
+                                    option(value=instructor.name)= instructor.name
+                        div.form-group
+                            label(for="vacancy") Количество мест
+                            input.form-control#vacancy_input(type="number", value ='10', min="0", max="20" ,name="vacancy")
+                        label(for="participant") Участники
+                        if client-list
+                            table.table
+                                thead
+                                    tr 
+                                        th(scope="col") #
+                                        th(scope="col") Имя клиента
+                                        th(scope="col") Номер телефона
+                                        th(scope="col")
+                                tbody
+                                    each client, ind in client_list
+                                        tr  
+                                            th(scope="row")= ind+1
+                                            td #{client.name}
+                                            td #{client.phone_number}
+                                            td(align="right") 
+                                                a(href='/admin/clients/delete'+client.url)
+                                                    i.fa.fa-times
+                        .form-group.col-md-12
+                            input.form-control.new_mem_input(type="text", placeholder="Имя, Фамилия", name="new_mem", value="")
+                        .form-group.col-md-12
+                            input.form-control.phone_input(type="text", placeholder="Телефон", name = "new_mem_phone", value="")
+                        .form-group.col-md-2
+                            button.btn.btn-primary#add_mem_input Добавить участника
+                        .modal-footer
+                            .form-group
+                                button.btn.btn-danger#delete-event Удалить
+                                button.btn.btn-secondary#cancle(data-dismiss="modal") Отмена
+                                button.btn.btn-success#save-event(type='submit') Сохранить
+mixin shedule_grid(time)
+    -for(var i=0;i<7;i++)
+        td.training(data-training-date=dates[i], data-training-time=time) 
+            if activities
+                - var notfound = true
+                each activity in activities
+                    - var writeOrNot=activity.date==dates[i] && activity.time==time
+                    if  writeOrNot
+                        - notfound = false            
+                        .card
+                            .card-body
+                                h5.card-title.activity-cell= activity.activity
+                                h6.card-subtitle.period-cell #{activity.timeStart} - #{activity.timeEnd}
+                                p.card-text.instructor-cell= activity.instructor
+                                p.vacancy-cell Мест: #{activity.vacancy}
+                                    i.fa.fa-edit
+                if notfound
+                    i.fa.fa-plus

@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible",content="IE=edge")
+    title= title
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    script(src="https://code.jquery.com/jquery-3.2.1.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css")
+    link(rel="stylesheet", href="/stylesheets/adminStyle.css")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js")
+    script(src="/javascripts/jquery.mask.min.js")
+    script(src="/javascripts/adminscripts.js")
+  body
+    if user
+        a.btn.btn-light(href="/admin/week/1",role="button") Текущая
+        a.btn.btn-light(href="/admin/week/2",role="button") Следующая
+        a.btn.btn-light(href="/admin/clients",role="button") Клиенты студии
+        a.btn.btn-light(href="/admin/instructors",role="button") Инструкторы
+
+        block content
+    else
+        block login

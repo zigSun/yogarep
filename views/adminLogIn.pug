@@ -1,0 +1,44 @@
+extends adminLayout
+
+block login
+    div.container
+        form.form-horizontal(role="form" method="POST" action="/admin/login")
+            div.row
+                div.col-md-3
+                div.col-md-6
+                    h2 Требуется авторизация
+                    hr
+            div.row
+                div.col-md-3
+                div.col-md-6
+                    div.form-group.has-danger
+                        label.sr-only(for="username") Имя пользователя 
+                        div.input-group.mb-2.mr-sm-2.mb-sm-0
+                            div.input-group-addon(style="width: 2.6rem")
+                                i.fa.fa-user
+                            input.form-control#username(type="text",name="username",placeholder="Имя пользователя...",required, autofocus)
+                div.col-md-3
+                    div.form-control-feedback
+                        span.text-danger.align-middle
+                            i.fa.fa-close 
+                            |Example error message
+            div.row
+                div.col-md-3
+                div.col-md-6
+                    div.form-group
+                        label.sr-only(for="password") Пароль
+                        div.input-group.mb-2.mr-sm-2.mb-sm-0
+                            div.input-group-addon(style="width: 2.6rem")
+                                i.fa.fa-key
+                            input.form-control#password(type="password", name="password", placeholder="Пароль...",required)
+                div.col-md-3
+                    div.form-control-feedback
+                        span.text-danger.align-middle
+                            i.fa.fa-close 
+                            |Example error message
+            div.row(style="padding-top: 1rem")
+                div.col-md-3
+                div.col-md-6
+                    button.btn.btn-success(type="submit")
+                        i.fa.fa-sign-in 
+                            | Войти
