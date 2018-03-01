@@ -47,7 +47,7 @@ block content
                     p.instructor-info Инструктор :
                         span#instructor-info-data
                     p.member-info Участников занятия :
-                        span#member-info-data
+                        span#member-info-data 
                     form#go-form
                         div.form-group.d-none
                             input#trainingdate_input(name="trainingdate", type="text")
@@ -76,11 +76,15 @@ mixin shedule_grid(time)
                             .card-body
                                 h5.card-title.activity-cell= activity.activity
                                 h6.card-subtitle.period-cell #{activity.timeStart} - #{activity.timeEnd}
-                                p.card-text.instructor-cell= activity.instructor
-                                - var vacancyCnt = activity.vacancy > 0
-                                if vacancyCnt
-                                    p.vacancy-cell Мест: 
-                                        span.vacancy-count-cell #{activity.vacancy}
-                                        button.btn.btn-sm.btn-success.go-btn Иду!
-                                else
-                                    p.vacancy-cell Мест нет
+                                -var isInstructor= typeof activity.instructor != "undefined"
+                                    if isInstructor  
+                                        p.card-text.instructor-cell= activity.instructor.name
+                                    else
+                                        p.card-text.instructor-cell= ""
+                                - var vacancyCnt = activity.vacancy_left > 0
+                                    if vacancyCnt
+                                        p.vacancy-cell Мест: 
+                                            span.vacancy-count-cell #{activity.vacancy_left}
+                                            button.btn.btn-sm.btn-success.go-btn Иду!
+                                    else
+                                        p.vacancy-cell Мест нет

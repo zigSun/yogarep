@@ -38,6 +38,7 @@ router.get('/etaerc', adminController.admin_create_get);
 router.post('/etaerc', adminController.admin_create_post);
 
 router.post('/activity/save', jsonParser, adminController.activity_save_post);
-//router.post('/activity/delete', jsonParser, adminController.activity_delete_post);
-
+router.post('/activity/delete', jsonParser, adminController.activity_delete_post);
+router.post('/activity/member_list', jsonParser, adminController.activity_member_list_post);
+router.post('/activity/member_list_delete',jsonParser,adminController.activity_member_list_delete_post);
 module.exports = router;

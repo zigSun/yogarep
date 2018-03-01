@@ -191,24 +191,85 @@ exports.activity_save_post = [
             timeStart: req.body.timestart,
             timeEnd: req.body.timeend,
             activity: req.body.activity,
-            vacancy: req.body.vacancy,
+            vacancy: Number(req.body.vacancy),
         }
-        if (req.body.instructor != "")
-            Instructor.findOne({ name: req.body.instructor })
-                .exec(function (err, results) {
+        console.log(req.body);
+        async.parallel({
+            instructor: function (callback) {
+                Instructor.findOne({ name: req.body.instructor }).exec(callback)
+            },
+            activity: function (callback) {
+                Activity.findOne({
+                    date: req.body.trainingdate,
+                    time: req.body.trainingtime
+                }).exec(callback)
+            }
+        }, function (err, result) {
+            console.log(result)
+            if (err) { return next(err); }
+            if (result.instructor != null) {
+                ActivityData.instructor = result.instructor._id;
+            }
+            if (result.activity != null) {
+                result.activity.set(ActivityData);
+                result.activity.save(function (err, ActivityData) {
+                    if (err) { return next(err) }
+                    res.json({ success: true });
+                })
+            }
+            else {
+                Activity.create(ActivityData, function (err, result) {
                     if (err) { return next(err); }
-                    console.log(results);
-                    ActivityData.instructor = results._id;
-                    Activity.create(ActivityData, function (err, result) {
-                        if (err) { return next(err) }
-                        res.json({ success: true });
-                    })
-                });
-        else {
-            Activity.create(ActivityData, function (err, result) {
+                    res.json({ success: true });
+                })
+            }
+        })
+    }
+];
+
+exports.activity_delete_post = function (req, res, next) {
+    Activity.findOneAndRemove({
+        date: req.body.trainingdate,
+        time: req.body.trainingtime
+    }, function (err, result) {
+        if (err) { return next(err); }
+        res.json({ success: true })
+    });
+}
+
+exports.activity_member_list_post = function (req, res, next) {
+    Activity.findOne({
+        date: req.body.trainingdate,
+        time: req.body.trainingtime
+    })
+        .populate('members')
+        .exec(function (err, result) {
+            console.log(result);
+            if (err) { return next(err); }
+            if (result.members == null)
+                res.json({ members: [] });
+            else
+                res.json({ members: result.members });
+        })
+};
+
+exports.activity_member_list_delete_post = function (req, res, next) {
+    Activity.findOne({
+        date: req.body.trainingdate,
+        time: req.body.trainingtime
+    })
+        .populate('members')
+        .exec(function (err, result) {
+            console.log(result);
+            if (err) { return next(err); }
+            var found = result.members.find(function (element, ind) {
+                return element.name == req.body.memberName;
+            });
+            var inx = result.members.indexOf(found);
+            result.members.splice(inx, 1);
+            result.save(function (err, ActivityData) {
                 if (err) { return next(err) }
                 res.json({ success: true });
-            })
-        }
-    }
-]
+            });
+        });
+}

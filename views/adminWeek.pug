@@ -68,34 +68,25 @@ block content
                             label(for="vacancy") Количество мест
                             input.form-control#vacancy_input(type="number", value ='10', min="0", max="20" ,name="vacancy")
                         label(for="participant") Участники
-                        if client-list
-                            table.table
-                                thead
-                                    tr 
-                                        th(scope="col") #
-                                        th(scope="col") Имя клиента
-                                        th(scope="col") Номер телефона
-                                        th(scope="col")
-                                tbody
-                                    each client, ind in client_list
-                                        tr  
-                                            th(scope="row")= ind+1
-                                            td #{client.name}
-                                            td #{client.phone_number}
-                                            td(align="right") 
-                                                a(href='/admin/clients/delete'+client.url)
-                                                    i.fa.fa-times
+                        table.table
+                            thead
+                                tr 
+                                    th(scope="col") #
+                                    th(scope="col") Имя клиента
+                                    th(scope="col") Номер телефона
+                                    th(scope="col")
+                            tbody#member_list
                         .form-group.col-md-12
                             input.form-control.new_mem_input(type="text", placeholder="Имя, Фамилия", name="new_mem", value="")
                         .form-group.col-md-12
                             input.form-control.phone_input(type="text", placeholder="Телефон", name = "new_mem_phone", value="")
                         .form-group.col-md-2
-                            button.btn.btn-primary#add_mem_input Добавить участника
+                            button.btn.btn-primary#add_mem_input(type='button') Добавить участника
                         .modal-footer
                             .form-group
-                                button.btn.btn-danger#delete-event Удалить
+                                button.btn.btn-danger#delete-activity(type='button') Удалить
                                 button.btn.btn-secondary#cancle(data-dismiss="modal") Отмена
-                                button.btn.btn-success#save-event(type='submit') Сохранить
+                                button.btn.btn-success#save-activity(type='submit') Сохранить
 mixin shedule_grid(time)
     -for(var i=0;i<7;i++)
         td.training(data-training-date=dates[i], data-training-time=time) 
@@ -108,9 +99,22 @@ mixin shedule_grid(time)
                         .card
                             .card-body
                                 h5.card-title.activity-cell= activity.activity
-                                h6.card-subtitle.period-cell #{activity.timeStart} - #{activity.timeEnd}
-                                p.card-text.instructor-cell= activity.instructor
-                                p.vacancy-cell Мест: #{activity.vacancy}
-                                    i.fa.fa-edit
+                                h6.card-subtitle.period-cell 
+                                    span#period-cell-start #{activity.timeStart}
+                                    | - 
+                                    span#period-cell-end #{activity.timeEnd}
+                                -var isInstructor= typeof activity.instructor != "undefined"
+                                    if isInstructor 
+                                        p.card-text.instructor-cell= activity.instructor.name
+                                    else
+                                        p.card-text.instructor-cell= ""
+                                - var vacancyCnt = activity.vacancy_left > 0
+                                    if vacancyCnt
+                                        p.vacancy-cell Мест: 
+                                            span.vacancy-count-cell #{activity.vacancy_left}
+                                            i.fa.fa-edit
+                                    else
+                                        p.vacancy-cell Мест нет
+                                            i.fa.fa-edit
                 if notfound
                     i.fa.fa-plus

@@ -11,7 +11,20 @@ $(document).ready(function () {
         $('#preiod-info-data').text($(this).parents('.training').find('.period-cell').text());
         $('#activity-info-data').text($(this).parents('.training').find('.activity-cell').text());
         $('#instructor-info-data').text($(this).parents('.training').find('.instructor-cell').text());
-        $('#member-info-data').text($(this).parents('.training').find('.vacancy-count-cell').text());
+        $.ajax({
+            type: "POST",
+            url: "/activity/user/members-count",
+            data: JSON.stringify({
+                trainingdate: trainingdate,
+                trainingtime: trainingtime,
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+                $('#member-info-data').text(data.member_count);
+            },
+        });
     });
     $('#go-form').submit(function (e) {
         e.preventDefault();
@@ -22,8 +35,8 @@ $(document).ready(function () {
         $.ajax({
             type: "POST",
             url: "/activity/user/save",
-            data: JSON.stringify({ 
-                trainingdate: trainingDate, 
+            data: JSON.stringify({
+                trainingdate: trainingDate,
                 trainingtime: trainingTime,
                 memName: newMemName,
                 memPhone: newMemPhone,
@@ -31,10 +44,7 @@ $(document).ready(function () {
             dataType: "json",
             contentType: "application/json",
             success: function (data) {
-                console.log(data);
-                $('#activity-modal').modal('hide');
-                var edited_cell = $('[data-training-date="'+trainingDate+'"][data-training-time="'+trainingTime+'"] '); //обновляем ячейку
-                console.log(edited_cell);
+                location.reload();
             },
         });
     })

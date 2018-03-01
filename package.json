@@ -17,6 +17,7 @@
     "express": "~4.15.5",
     "express-session": "^1.15.6",
     "express-validator": "^5.0.2",
+    "frameguard": "^3.0.0",
     "helmet": "^3.11.0",
     "moment": "^2.20.1",
     "mongoose": "^5.0.7",

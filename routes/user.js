@@ -8,8 +8,8 @@ router.get('/', function(req, res, next) {
   res.redirect('/week/1');
 });
 
-router.get('/week/:num', userController.user_week_get)
-router.post('/activity/user/save', jsonParser, function(req,res,next) {
-  res.json({success:true});
-})
+router.get('/week/:num', userController.user_week_get);
+router.post('/activity/user/save', jsonParser, userController.user_add_to_activity);
+router.post('/activity/user/members-count',jsonParser, userController.user_members_count);
+
 module.exports = router;

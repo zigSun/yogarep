@@ -29,3 +29,6 @@ i.fa {
 .time_head {
     max-width: 64px;
 }
+.card-body p {
+    margin : 0;
+}
