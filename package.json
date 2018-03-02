@@ -2,6 +2,9 @@
   "name": "youga-shedule",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "8.9.4"
+  },
   "scripts": {
     "start": "node ./bin/www",
     "devstart": "nodemon ./bin/www"
