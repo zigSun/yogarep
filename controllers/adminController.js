@@ -101,7 +101,7 @@ exports.instructors_delete = function (req, res, next) {
             if (err) { return next(err); }
             res.redirect('/admin/instructors');
         })
-}
+};
 
 exports.clients_get = function (req, res, next) {
     Client.find({})
@@ -109,6 +109,16 @@ exports.clients_get = function (req, res, next) {
             if (err) { return next(err); }
             res.render('adminClients', { title: 'Клиенты', user: req.session.userId, client_list: result });
         });
+};
+
+exports.search_member = function (req,res,next) {
+    var regex = new RegExp(req.query["name"], 'i');
+    console.log(req.query.name);
+    Client.find({'name': regex},'name phone_number').limit(20).exec(function (err,result) {
+        if(err) {return next(err);}
+        console.log(result);
+        res.json({"query": "Unit", "suggestions" : result});      
+    });
 };
 
 exports.clients_add_post = [
@@ -142,6 +152,17 @@ exports.clients_delete = function (req, res, next) {
             if (err) { return next(err); }
             res.redirect('/admin/clients');
         })
+};
+exports.clients_approve = function (req, res, next) {
+    Client.findById(req.params.id)
+        .exec(function (err, result) {
+            if (err) { return next(err); }
+            result.status = "Подтвержден";
+            result.save(function (err,saved) {
+                if (err) { return next(err); }
+                res.redirect('/admin/clients');
+            });
+        });
 }
 
 exports.week_get = function (req, res, next) {
@@ -246,6 +267,10 @@ exports.activity_member_list_post = function (req, res, next) {
         .exec(function (err, result) {
             console.log(result);
             if (err) { return next(err); }
+            if(result == null) {
+                res.json({ members: [] });
+                return next();
+            }
             if (result.members == null)
                 res.json({ members: [] });
             else
@@ -272,4 +297,4 @@ exports.activity_member_list_delete_post = function (req, res, next) {
                 res.json({ success: true });
             });
         });
-}
+};

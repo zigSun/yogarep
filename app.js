@@ -10,9 +10,13 @@ var compression = require('compression');
 var helmet = require('helmet');
 var user = require('./routes/user');
 var admin = require('./routes/admin');
+var cors = require('cors');
+
+
+
 
 var app = express();
-
+app.use(cors());
 //DB setup
 var mongoose = require('mongoose');
 var MongoDB = process.env.MONGODB_URI || 'mongodb://yoga-admin:admin@ds151558.mlab.com:51558/yogatest-mydb';
@@ -32,7 +36,10 @@ app.use(session({
   })
 }));
 
-
+app.use(function(req,res,next) {
+  res.setHeader('X-Frame-Options', 'ALLOWALL')
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +48,6 @@ app.set('view engine', 'pug');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(compression());
-app.use(helmet());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -15,7 +15,13 @@ block content
                     th(scope="row")= ind+1
                     td #{client.name}
                     td #{client.phone_number}
-                    td #{client.status}
+                    -var status = client.status == "Не подтвержден"
+                    if status
+                        td 
+                            a(href='/admin/clients/approve/'+ client._id) #{client.status}
+                    else
+                        td #{client.status}
+                            
                     td(align="right") 
                         a(href='/admin/clients/delete'+client.url)
                             i.fa.fa-times

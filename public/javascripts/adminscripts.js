@@ -15,14 +15,11 @@ $(document).ready(function () {
         var trainingdate = $(this).parents('.training').data().trainingDate;
         var trainingtime = $(this).parents('.training').data().trainingTime;
         members_list(trainingdate, trainingtime);
-        console.log($(this).parents('.training').data())
         var startTime = $(this).parents('.training').find('#period-cell-start').text();
         var endTime = $(this).parents('.training').find('#period-cell-start').text();
         var activity = $(this).parents('.training').find('.activity-cell').text();
         var instructor = $(this).parents('.training').find('.instructor-cell').text();
         var vacancy = Number($(this).parents('.training').find('.vacancy-count-cell').text());
-
-        console.log($(this).parents('.training'));
         $('#trainingdate_input').val(trainingdate);
         $('#trainingtime_input').val(trainingtime);
         $('#timeStart_input').val(startTime);
@@ -30,7 +27,6 @@ $(document).ready(function () {
         $('#activity_input').val(activity);
         $('#instructor_input').val(instructor);
         $('#vacancy_input').val(vacancy);
-
     });
     $('#activity-form').submit(function (e) {
         e.preventDefault();
@@ -63,7 +59,6 @@ $(document).ready(function () {
     $('#delete-activity').click(function () {
         var trainingDate = $('#trainingdate_input').val();
         var trainingTime = $('#trainingtime_input').val();
-        console.log(trainingDate + " " + trainingTime)
         $.ajax({
             type: "POST",
             url: "/admin/activity/delete",
@@ -77,7 +72,32 @@ $(document).ready(function () {
                 location.reload();
             },
         });
-    })
+    });
+    $('.autocomplete-name').autocomplete({
+        serviceUrl: 'search',
+        paramName: 'name',
+        transformResult: function(response) {
+            var arr = JSON.parse(response);
+            return {
+                suggestions: $.map(arr.suggestions, function(dataItem) {
+                    return { value: dataItem.name, data: dataItem.phone_number };
+                })
+            };
+        },
+        onSelect: function (suggestion) {
+           $('.phone_input').val(suggestion.data);
+        }
+    });
+    $('#add_mem_input').click(function () {
+        var mem_name = $('[name="new_mem"]').val();
+        var mem_phone = $('[name="new_mem_phone"').val();
+        console.log(mem_name + " " + mem_phone);
+        var member = {name: mem_name, phone_number : mem_phone};
+        var trainingdate=$('#trainingdate_input').val();
+        var trainingtime=$('#trainingtime_input').val();
+        fill_member(member,trainingdate,trainingtime);
+        
+    });
 });
 
 function members_list(trainingdate, trainingtime) {
@@ -106,22 +126,22 @@ function members_list(trainingdate, trainingtime) {
                     url: "/admin/activity/member_list_delete",
                     data: JSON.stringify({
                         trainingdate: trainingDate,
-                        trainingtime: trainingTime,
+                        trainingtime: trainingTime, 
                         memberName : memberName
                     }),
                     dataType: "json",
                     contentType: "application/json",
                     success: function (data) {
-                        console.log($(this));
                         that.parents('tr').remove();
                     }
                 })
             });
         }
-    })
+    })  
+
 };
+
 function fill_member(member, trainingdate, trainingtime) {
-    console.log(trainingdate);
     var new_member = "<tr> <th scope='row'></th><td>" + member.name + "</td><td>" + member.phone_number + "</td><td align='right'> <i data-training-date='" + trainingdate + "' data-training-time='" + trainingtime + "'data-member-name='" + member.name + "' class='fa fa-times delete-member'></i></td></tr>";
     $('#member_list').append(new_member);
-}
+};

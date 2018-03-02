@@ -19,12 +19,14 @@ router.get('/', checkSignIn, function (req, res, next) {
     res.redirect('/admin/week/1');
 });
 
+router.get('/week/search', adminController.search_member);
 router.get('/week/:num', checkSignIn, adminController.week_get);
+
 
 router.get('/clients', checkSignIn, adminController.clients_get);
 router.post('/clients', checkSignIn, adminController.clients_add_post);
 router.get('/clients/delete/:id', checkSignIn, adminController.clients_delete);
-
+router.get('/clients/approve/:id', checkSignIn, adminController.clients_approve);
 
 router.get('/instructors', checkSignIn, adminController.instructors_get);
 router.post('/instructors', checkSignIn, adminController.instructors_add_post);
