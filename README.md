@@ -29,5 +29,8 @@
  ### Интерфейс администратора - Управление списком инструкторов
  ![Управление списком инструкторов](https://github.com/zigSun/imagesForReadme/blob/master/yogarepIMG/instructors.png)
  
+ ### Интерфейс администратора - Управление списком клиентов
+ ![Управление списком клиентов](https://github.com/zigSun/imagesForReadme/blob/master/yogarepIMG/clients_interface.png)
+ 
  ### Интерфейс пользователя - форма записи на тренировку
  ![Интерфейс пользователя - форма записи на тренировку](https://github.com/zigSun/imagesForReadme/blob/master/yogarepIMG/user.png)
